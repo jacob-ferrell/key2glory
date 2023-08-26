@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import Game from './components/Game'
 
 function App() {
 
   return (
     <>
-      
+      <Game text="Jumps over the lazy dog with lightning speed, creating a spectacle of elegance and skill." />
     </>
   )
 }
