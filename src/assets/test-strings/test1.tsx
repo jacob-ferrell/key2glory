@@ -1,0 +1,1 @@
+export default "The quick red fox jumps over the lazy dog with lightning speed, creating a spectacle of elegance and skill."
