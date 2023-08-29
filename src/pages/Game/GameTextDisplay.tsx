@@ -3,18 +3,16 @@ import ConfettiExplosion from "react-confetti-explosion";
 
 type GameTextDisplayProps = {
   text: string;
-  index: number;
   matches: boolean[];
   isExploading: boolean;
 };
 
 export default function GameTextDisplay({
   text,
-  index,
   matches,
   isExploading,
 }: GameTextDisplayProps) {
-  useEffect(() => {}, [index, matches]);
+  useEffect(() => {}, [matches]);
 
   function renderText() {
     let i = 0;
@@ -23,7 +21,7 @@ export default function GameTextDisplay({
       .map((word, i, words) => (i === words.length - 1 ? word : word + " "));
     return words.map((word) => {
       return (
-        <div className="flex">
+        <div key={i} className="flex">
           {word.split("").map((char) => {
             char = char == " " ? "\u00A0" : char;
             const classes = `${
@@ -34,7 +32,7 @@ export default function GameTextDisplay({
                 : "wiggle text-red-500 bg-red-500"
             } bg-opacity-10 rounded w-5 flex justify-center items-center text-center`;
             i++;
-            return <div id={`c-${i}`} className={classes}>{char}</div>;
+            return <div id={`c-${i}`} key={i} className={classes}>{char}</div>;
           })}
         </div>
       );
