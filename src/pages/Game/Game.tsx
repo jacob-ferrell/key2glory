@@ -20,7 +20,7 @@ export default function Game({ text }: GameProps) {
   } = useInput(text);
 
   return (
-    <>
+    <div className="">
       <StatsModal isOpen={showModal} setIsOpen={setShowModal} stats={stats} />
       <div className="flex flex-col items-center gap-12">
         <Stopwatch elapsedTime={elapsedTime} />
@@ -31,6 +31,6 @@ export default function Game({ text }: GameProps) {
         />
         <ClearButton setUserInput={setUserInput} />
       </div>
-    </>
+    </div>
   );
 }
