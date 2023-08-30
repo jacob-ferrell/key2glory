@@ -24,15 +24,21 @@ export default function GameTextDisplay({
         <div key={i} className="flex">
           {word.split("").map((char) => {
             char = char == " " ? "\u00A0" : char;
+            const isNext = i === matches.length;
             const classes = `${
               i > matches.length - 1
-                ? `text-grey-800 ${i === matches.length ? "border-b-2 border-blue-500" : ""}`
+                ? `text-grey-800`
                 : matches[i]
                 ? "grow text-green-500 bg-green-500"
                 : "wiggle text-red-500 bg-red-500"
-            } bg-opacity-10 rounded w-5 flex justify-center items-center text-center`;
+            } bg-opacity-10 rounded w-5 flex justify-center items-center text-center relative`;
             i++;
-            return <div id={`c-${i}`} key={i} className={classes}>{char}</div>;
+            return (
+                <div id={`c-${i}`} key={i} className={classes}>
+                  {char}
+                  {isNext ? <div className="absolute bottom-0 w-full h-1 bg-violet-500 rounded animate-opacity"></div> : null}
+                </div>
+            );
           })}
         </div>
       );
@@ -40,7 +46,7 @@ export default function GameTextDisplay({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center px-3 bg-zinc-900 rounded py-2">
       {isExploading ? (
         <ConfettiExplosion
           force={0.6}
