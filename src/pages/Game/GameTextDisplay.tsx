@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
+import useTrackLines from "../../hooks/useTrackLines";
 
 type GameTextDisplayProps = {
   text: string;
@@ -12,8 +13,10 @@ export default function GameTextDisplay({
   matches,
   isExploading,
 }: GameTextDisplayProps) {
-  useEffect(() => {}, [matches]);
+  
+  const { nextCharRef, containerRef, transformY } = useTrackLines();
 
+  useEffect(() => {}, [matches]);
   function renderText() {
     let i = 0;
     const words = text
@@ -34,10 +37,12 @@ export default function GameTextDisplay({
             } bg-opacity-10 rounded w-5 flex justify-center items-center text-center relative`;
             i++;
             return (
-                <div id={`c-${i}`} key={i} className={classes}>
-                  {char}
-                  {isNext ? <div className="absolute bottom-0 w-full h-1 bg-violet-500 rounded animate-opacity"></div> : null}
-                </div>
+              <div id={`c-${i}`} key={i} className={classes} ref={isNext ? nextCharRef : null}>
+                {char}
+                {isNext ? (
+                  <div className="absolute bottom-0 w-full h-1 bg-violet-500 rounded animate-opacity"></div>
+                ) : null}
+              </div>
             );
           })}
         </div>
@@ -46,7 +51,7 @@ export default function GameTextDisplay({
   }
 
   return (
-    <div className="flex flex-col justify-center items-center px-3 bg-zinc-900 rounded py-2">
+    <div className={`flex flex-col justify-center items-center `}>
       {isExploading ? (
         <ConfettiExplosion
           force={0.6}
@@ -55,7 +60,11 @@ export default function GameTextDisplay({
           width={1000}
         />
       ) : null}
-      <div className="text-2xl flex flex-wrap">{renderText()}</div>
+      <div ref={containerRef} className="bg-zinc-900 rounded relative overflow-hidden h-40">
+        <div  style={{transform: `translateY(${transformY}px)`}}className="text-2xl flex flex-wrap clip px-3">
+          {renderText()}
+        </div>
+      </div>
     </div>
   );
 }
