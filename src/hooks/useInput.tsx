@@ -25,7 +25,7 @@ export default function useInput(text: string) {
     if (userInput.length && timer.interval === null) { //start timer if user starts typing
       timer.start();
     }
-    if (!userInput.length && timer.interval !== null) { //stop timer if user deletes all input
+    if (!userInput.length && timer.interval !== null) { //stop timer if user deletes all input and reset all stats
       return reset();
     }
     if (matches[matches.length - 1] === false && isError(userInput) && userInput.length > prevUserInputRef.current.length) { //if user makes 2 mistakes in a row, do not progress but add the missed character
