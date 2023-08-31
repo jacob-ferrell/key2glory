@@ -37,6 +37,14 @@ export default function useStats({text, charactersMissed, timer}: useStatsProps)
     return accuracy;
   }
 
+  function getMissedKeysCounts() {
+    let counts: { [key: string]: number } = {};
+    charactersMissed.forEach((char) => {
+      counts[char] = (counts[char] || 0) + 1;
+    });
+    return counts;
+  }
+
   function getStats() {
     const newStats = {
       WPM: getWPM(),
