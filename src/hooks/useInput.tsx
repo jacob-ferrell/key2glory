@@ -22,36 +22,24 @@ export default function useInput(text: string) {
   }, []);
 
   useEffect(() => {
-    if (userInput.length && timer.interval === null) {
+    if (userInput.length && timer.interval === null) { //start timer if user starts typing
       timer.start();
     }
-    if (!userInput.length && timer.interval !== null) {
-      timer.reset();
+    if (!userInput.length && timer.interval !== null) { //stop timer if user deletes all input
+      return reset();
     }
-    if (userInput.length) {
-      handleError();
+    if (matches[matches.length - 1] === false && isError(userInput) && userInput.length > prevUserInputRef.current.length) { //if user makes 2 mistakes in a row, do not progress but add the missed character
+      addMissedCharacter();
+      return setUserInput(prevUserInputRef.current);
     }
+    if (!isBackSpace(prevUserInputRef.current, userInput) && isError(userInput) && userInput !== prevUserInputRef.current) { //add missed character if user makes a mistake
+      addMissedCharacter();
+    }
+    setMatches(getMatchesArray(userInput));
     if (userInput.length === text.length) {
-      handleCompletion();
+      return handleCompletion();
     }
   }, [userInput, timer.interval]);
-
-  function handleError() {
-    const value = userInput;
-    console.log(value);
-    const prev = prevUserInputRef.current;
-    const lastCharacterTyped = value[value.length - 1];
-    if (isBackSpace(prev, value) || !isError(value)) return;
-    if (userInput.length === 1) {
-      return setCharactersMissed([text[0]]);
-    }
-    console.log("error");
-    console.log(lastCharacterTyped);
-    setCharactersMissed((prevCharactersMissed) => [
-      ...prevCharactersMissed,
-      text[value.length - 1],
-    ]);
-  }
 
   function isBackSpace(prev: string, value: string) {
     return prev.length > value.length;
@@ -61,20 +49,26 @@ export default function useInput(text: string) {
     return value[value.length - 1] !== text[value.length - 1];
   }
 
+  function addMissedCharacter() {
+    setCharactersMissed((prevCharactersMissed) => [
+      ...prevCharactersMissed,
+      text[userInput.length - 1],
+    ]);
+  }
+
   function handleKeyPress(e: KeyboardEvent) {
     if (e.key.length > 1 && e.key !== "Backspace") return;
     e.preventDefault();
-    setUserInput((prevUserInput) => {
-      setIsExploading(false);
+    setIsExploading(false);
+    setUserInput((prev) => {
+      prevUserInputRef.current = prev;
       const newUserInput =
-        e.key.length === 1 ? prevUserInput + e.key : prevUserInput.slice(0, -1);
-      setMatches(getMatchesArray(newUserInput));
+      e.key.length === 1 ? prev + e.key : prev.slice(0, -1);
       return newUserInput;
     });
   }
 
   function handleCompletion() {
-    if (userInput.length !== text.length) return;
     timer.stop();
     setIsExploading(true);
     stats.getStats();
