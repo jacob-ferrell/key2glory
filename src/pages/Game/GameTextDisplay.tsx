@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import ConfettiExplosion from "react-confetti-explosion";
 import useTrackLines from "../../hooks/useTrackLines";
 
