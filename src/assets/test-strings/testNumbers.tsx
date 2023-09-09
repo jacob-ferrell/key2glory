@@ -1,0 +1,1 @@
+export default "I have 2 apples in my bag. Yesterday, I saw 3 giraffes at the zoo. A recipe for banana bread requires 4 ripe bananas. The temperature outside is currently 72 degrees Fahrenheit. My phone battery is at 35%. There are 8 colorful balloons in the room. My dog is 6 years old. I planted 9 sunflower seeds in the garden.";
