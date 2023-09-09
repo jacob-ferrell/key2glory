@@ -8,7 +8,7 @@ export default function Stopwatch({elapsedTime}: StopwatchProps) {
         const formattedElapsedTime = formatElapsedTime();
         const digits = formattedElapsedTime.split('');
         return digits.map((digit, index) => {
-            return <div key={index} className="text-4xl h-full w-5">{digit}</div>
+            return <div key={index} className="text-4xl h-full w-5 text-center">{digit}</div>
         })
     }
     function formatElapsedTime() {
