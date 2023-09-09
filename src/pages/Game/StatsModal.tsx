@@ -1,7 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import capitalize from "../../util/capitalize";
-import ConfettiExplosion from "react-confetti-explosion";
 
 type StatsModalProps = {
   stats: {
