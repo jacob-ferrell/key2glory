@@ -4,7 +4,7 @@ type ClearButtonProps = {
 
 export default function ClearButton({ setUserInput }: ClearButtonProps) {
 
-  function handleClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+  function handleClick() {
     setUserInput("");
   }
 
