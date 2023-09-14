@@ -56,24 +56,25 @@ export default function TestTypes() {
       <div className="w-full h-fit bg-zinc-800 flex rounded-lg">
         {testTypes.map((testType, i) => {
           return (
-            <>
-              <div className="w-1/3 h-full flex flex-col justify-center text-white items-start p-4 gap-5 relative">
-                <div className="flex justify-start gap-5 text-xl items-center w-full">
-                  <div className="text-2xl font-bold">{testType.name}</div>
-                  {testType?.coloredText}
-                </div>
-                <div className="h-12">{testType.description}</div>
-                <button
-                  onClick={() => navigate(testType.url)}
-                  className={`bg-purple-600 px-3 font-bold`}
-                >
-                  Begin!
-                </button>
-                {i !== 0 ? (
-                  <div className="h-full border-r-4 h-3/4 rounded-full border-zinc-900 absolute -left-2.5 z-20"></div>
-                ) : null}
+            <div
+              key={"test" + i}
+              className="w-1/3 h-full flex flex-col justify-center text-white items-start p-4 gap-5 relative"
+            >
+              <div className="flex justify-start gap-5 text-xl items-center w-full">
+                <div className="text-2xl font-bold">{testType.name}</div>
+                {testType?.coloredText}
               </div>
-            </>
+              <div className="h-12">{testType.description}</div>
+              <button
+                onClick={() => navigate(testType.url)}
+                className={`bg-purple-600 px-3 font-bold`}
+              >
+                Begin!
+              </button>
+              {i !== 0 ? (
+                <div className="border-r-4 h-3/4 rounded-full border-zinc-900 absolute -left-2.5 z-20"></div>
+              ) : null}
+            </div>
           );
         })}
       </div>
