@@ -3,7 +3,7 @@ import ConfettiExplosion from "react-confetti-explosion";
 import useTrackLines from "../../hooks/useTrackLines";
 
 type GameTextDisplayProps = {
-  text: string;
+  text: string | undefined;
   matches: boolean[];
   isExploading: boolean;
 };
@@ -18,6 +18,7 @@ export default function GameTextDisplay({
 
   useEffect(() => {}, [matches]);
   function renderText() {
+    if (!text) return;
     let i = 0;
     const words = text
       .split(" ")
