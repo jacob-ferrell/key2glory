@@ -9,7 +9,6 @@ export default function useTrackLines() {
   const [nextCharTop, setNextCharTop] = useState(0);
 
   useEffect(() => {
-    //write a function inside this useEffect that sets the wordHeight to the value of nextCharRef.current.clientHeight on window resize
     function handleResize() {
         setNextCharTop(nextCharRef.current!.offsetTop);
         setContainerTop(containerRef.current!.offsetTop);
