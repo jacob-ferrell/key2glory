@@ -28,21 +28,9 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: '/test-basic',
-        element: <Game text={test1} />,
+        path: '/typing-test/:testId',
+        element: <Game />,
       },
-      {
-        path: "/test-numbers",
-        element : <Game text={testNumbers} />,
-      },
-      {
-        path: "/test-special",
-        element : <Game text={testSpecial} />,
-      },
-      {
-        path: '/bar',
-        element: <div>foo</div>,
-      }
     ],
   },
 ]);
