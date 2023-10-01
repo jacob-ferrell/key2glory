@@ -8,7 +8,7 @@ export default function TestTypes() {
       name: "General",
       description:
         "Typing test with common words, punctuation and occasional numbers",
-      url: "/test-basic",
+      testId: 1,
       coloredText: (
         <div className="text-xl font-bold bg-zinc-900 px-2 rounded-xl">
           <span className="text-blue-500">A</span>
@@ -26,7 +26,7 @@ export default function TestTypes() {
     {
       name: "Numbers",
       description: "Typing test with a focus on numbers",
-      url: "/test-numbers",
+      testId: 2,
       coloredText: (
         <div className="text-xl font-bold bg-zinc-900 px-2 rounded-xl">
           <span className="text-purple-300">1</span>
@@ -39,7 +39,7 @@ export default function TestTypes() {
     {
       name: "Special Characters",
       description: "Typing test with a focus special characters",
-      url: "/test-special",
+      testId: 3,
       coloredText: (
         <div className="text-xl font-bold bg-zinc-900 px-2 rounded-xl">
           <span className="text-red-500">!</span>
@@ -66,7 +66,7 @@ export default function TestTypes() {
               </div>
               <div className="h-12">{testType.description}</div>
               <button
-                onClick={() => navigate(testType.url)}
+                onClick={() => navigate(`/typing-test/${testType.testId}`)}
                 className={`bg-purple-600 px-3 font-bold`}
               >
                 Begin!
