@@ -26,5 +26,5 @@ export default function useTimer() {
     setElapsedTime(0.0);
   }
 
-  return {elapsedTime, start, stop, reset, interval: intervalRef.current};
+  return { elapsedTime, start, stop, reset, interval: intervalRef.current };
 }
