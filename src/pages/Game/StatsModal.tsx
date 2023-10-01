@@ -1,23 +1,54 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment } from "react";
-import capitalize from "../../util/capitalize";
+import { Fragment, useEffect, useState } from "react";
+import RateTest from "./RateTest";
+import MissedCharactersTable from "./MissedCharactersTable";
+import { Stats } from "../../common/types";
+import { useAuth0 } from "@auth0/auth0-react";
 
 type StatsModalProps = {
-  stats: {
-    WPM: number;
-    accuracy: string;
-    time: string;
-    "Keys Missed": number;
-  };
+  stats: Stats;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  setRating: (rating: number | null) => void;
+  rating: number | null;
+};
+
+type SliderValues = {
+  wpm: number;
+  accuracy: number;
+  overallScore: number;
 };
 
 export default function StatsModal({
   stats,
   isOpen,
   setIsOpen,
+  rating,
+  setRating,
 }: StatsModalProps) {
+
+  const { isAuthenticated } = useAuth0();
+  const [showMissedCharacters, setShowMissedCharacters] =
+    useState<boolean>(false);
+
+  const [sliderValues, setSliderValues] = useState<SliderValues>({
+    wpm: 0,
+    accuracy: 0,
+    overallScore: 0,
+  });
+
+  useEffect(() => {
+    setTimeout(() => {
+      setInterval(() => {
+        setSliderValues((prev) => ({
+          wpm: Math.min(prev.wpm + 1, stats.WPM),
+          accuracy: Math.min(prev.accuracy + 1, stats.accuracy),
+          overallScore: Math.min(prev.overallScore + 1, stats.overallScore),
+        }));
+      }, 10);
+    }, 300);
+  }, []);
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -53,23 +84,79 @@ export default function StatsModal({
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900 text-center"
-                  >
-                    Stats
-                  </Dialog.Title>
-                  
-                  <div className="mt-2">
-                    <ul className="text-sm text-gray-500">
-                      {Object.entries(stats).map(([key, value]) => {
-                        return (
-                          <li key={key}>
-                            <span className="font-bold">{capitalize(key)}</span>
-                            : {value}
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
+                  ></Dialog.Title>
 
+                  <div className="mt-2 flex flex-col gap-2 justify-center w-full">
+                    <ul className="text-sm text-gray-500 flex flex-col gap-1">
+                      <li className="flex flex-col gap-1 flex-wrap nowrap items-center">
+                        <span className="font-bold">WPM: {stats.WPM}</span>
+                        <div className="rounded bg-gray-200 relative w-full h-5">
+                          <div
+                            style={{ width: `${(stats.wpmScore / 8) * 100}%` }}
+                            className="h-full"
+                          >
+                            <div
+                              className="h-full bg-green-500"
+                              style={{ width: `${sliderValues.wpm}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex flex-col gap-1 flex-wrap nowrap items-center">
+                        <span className="font-bold">
+                          Accuracy: {stats.accuracy}%
+                        </span>
+                        <div className="rounded bg-gray-200 relative w-full h-5">
+                          <div
+                            style={{ width: `${stats.accuracy}%` }}
+                            className="h-full"
+                          >
+                            <div
+                              className="h-full bg-green-500"
+                              style={{ width: `${sliderValues.accuracy}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="flex flex-col gap-1 flex-wrap nowrap items-center">
+                        <span className="font-bold">
+                          Overall Score: {stats.overallScore}
+                        </span>
+                        <div className="rounded bg-gray-200 relative w-full h-5">
+                          <div
+                            style={{ width: `${stats.overallScore}%` }}
+                            className="h-full"
+                          >
+                            <div
+                              className="h-full bg-green-500"
+                              style={{ width: `${sliderValues.accuracy}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      </li>
+                    </ul>
+                    <div className="flex">
+                      <div className={`flex flex-col items-center w-${isAuthenticated ? '1/2' : 'full'}`}>
+                        <span
+                          className="text-blue-500 cursor-pointer font-bold text-xs"
+                          onClick={() =>
+                            setShowMissedCharacters((prev) => !prev)
+                          }
+                        >
+                          {showMissedCharacters
+                            ? "Hide Missed Characters ▲"
+                            : "Show Missed Characters ▼"}
+                        </span>
+                        <MissedCharactersTable
+                          missedCharacters={["a", "A", "a", "b"]}
+                          show={showMissedCharacters}
+                        />
+                      </div>
+                      { isAuthenticated ? <div className="w-1/2">
+                        <RateTest rating={rating} setRating={setRating} />
+                      </div> : null}
+                    </div>
+                  </div>
                   <div className="mt-4">
                     <button
                       type="button"
