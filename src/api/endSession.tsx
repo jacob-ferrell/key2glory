@@ -1,7 +1,13 @@
 import axiosInstance from "./axiosInstance";
 
-export default async function endSession(testId: string | undefined, endTime: number) {
-    const res = await axiosInstance.put(`private/typing-test/${testId}/session`, { endTime, errors: 8 });
+type endSessionParams = {
+    testId: string | undefined;
+    endTime: number;
+    missedCharacters: string[];
+}
+
+export default async function endSession({ testId, endTime, missedCharacters }: endSessionParams) {
+    const res = await axiosInstance.put(`private/typing-test/${testId}/session`, { endTime, missedCharacters });
     console.log(res.data)
     return res.data;
 }
