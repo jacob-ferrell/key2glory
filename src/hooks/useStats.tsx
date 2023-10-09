@@ -1,33 +1,21 @@
-import { useState } from "react";
-import { Stats } from "../common/types";
+
 import { createRange } from "../common/util";
-
-
 
 type useStatsProps = {
   text: string | null;
   missedCharacters: string[];
-  timer: any;
+  elapsedTime: number;
 };
 
 export default function useStats({
   text,
   missedCharacters,
-  timer,
+  elapsedTime,
 }: useStatsProps) {
-  const [stats, setStats] = useState<Stats>({
-    WPM: 0.0,
-    accuracy: 0.0,
-    time: 0.0,
-    missedCharacters: [],
-    wpmScore: 0,
-    overallScore: 0,
-  });
-
   function getWPM() {
     if (!text) return 0;
     let words: number = text.split(" ").length;
-    let minutes: number = parseFloat((timer.elapsedTime / 60).toFixed(2));
+    let minutes: number = parseFloat((elapsedTime / 60).toFixed(2));
     let WPM: number = parseFloat((words / minutes).toFixed(2));
     console.log(words, minutes, WPM);
     return WPM;
@@ -51,13 +39,13 @@ export default function useStats({
       createRange(70, 120),
       createRange(120, 200),
       createRange(200, 300),
-      createRange(300, 1000)
-    ]
+      createRange(300, 1000),
+    ];
     ranges.forEach((range, index) => {
       if (range.includes(wpm)) {
         return index + 1;
       }
-    })
+    });
     return 0;
   }
 
@@ -68,17 +56,15 @@ export default function useStats({
   function getStats() {
     const wpm = getWPM();
     const accuracy = getAccuracy();
-    const newStats = {
-       WPM: wpm,
+    return {
+      wpm,
       accuracy,
-      time: Number(timer.elapsedTime.toFixed(2)),
+      time: Number(elapsedTime.toFixed(2)),
       missedCharacters,
       wpmScore: getWpmScore(wpm),
-      overallScore: getOverallScore(wpm, accuracy)
+      overallScore: getOverallScore(wpm, accuracy),
     };
-    setStats(newStats);
-    return;
   }
 
-  return { stats, getStats };
+  return getStats();
 }

@@ -11,6 +11,7 @@ type StatsModalProps = {
   setIsOpen: (isOpen: boolean) => void;
   setRating: (rating: number | null) => void;
   rating: number | null;
+  missedCharacters: string[];
 };
 
 type SliderValues = {
@@ -26,7 +27,6 @@ export default function StatsModal({
   rating,
   setRating,
 }: StatsModalProps) {
-
   const { isAuthenticated } = useAuth0();
   const [showMissedCharacters, setShowMissedCharacters] =
     useState<boolean>(false);
@@ -41,7 +41,7 @@ export default function StatsModal({
     setTimeout(() => {
       setInterval(() => {
         setSliderValues((prev) => ({
-          wpm: Math.min(prev.wpm + 1, stats.WPM),
+          wpm: Math.min(prev.wpm + 1, stats.wpm),
           accuracy: Math.min(prev.accuracy + 1, stats.accuracy),
           overallScore: Math.min(prev.overallScore + 1, stats.overallScore),
         }));
@@ -89,7 +89,7 @@ export default function StatsModal({
                   <div className="mt-2 flex flex-col gap-2 justify-center w-full">
                     <ul className="text-sm text-gray-500 flex flex-col gap-1">
                       <li className="flex flex-col gap-1 flex-wrap nowrap items-center">
-                        <span className="font-bold">WPM: {stats.WPM}</span>
+                        <span className="font-bold">WPM: {stats.wpm}</span>
                         <div className="rounded bg-gray-200 relative w-full h-5">
                           <div
                             style={{ width: `${(stats.wpmScore / 8) * 100}%` }}
@@ -129,32 +129,40 @@ export default function StatsModal({
                           >
                             <div
                               className="h-full bg-green-500"
-                              style={{ width: `${sliderValues.accuracy}%` }}
+                              style={{ width: `${sliderValues.overallScore}%` }}
                             ></div>
                           </div>
                         </div>
                       </li>
                     </ul>
                     <div className="flex">
-                      <div className={`flex flex-col items-center w-${isAuthenticated ? '1/2' : 'full'}`}>
-                        <span
-                          className="text-blue-500 cursor-pointer font-bold text-xs"
-                          onClick={() =>
-                            setShowMissedCharacters((prev) => !prev)
-                          }
+                      {stats.missedCharacters.length > 0 ? (
+                        <div
+                          className={`flex flex-col items-center w-${
+                            isAuthenticated ? "1/2" : "full"
+                          }`}
                         >
-                          {showMissedCharacters
-                            ? "Hide Missed Characters ▲"
-                            : "Show Missed Characters ▼"}
-                        </span>
-                        <MissedCharactersTable
-                          missedCharacters={["a", "A", "a", "b"]}
-                          show={showMissedCharacters}
-                        />
-                      </div>
-                      { isAuthenticated ? <div className="w-1/2">
-                        <RateTest rating={rating} setRating={setRating} />
-                      </div> : null}
+                          <span
+                            className="text-blue-500 cursor-pointer font-bold text-xs"
+                            onClick={() =>
+                              setShowMissedCharacters((prev) => !prev)
+                            }
+                          >
+                            {showMissedCharacters
+                              ? "Hide Missed Characters ▲"
+                              : "Show Missed Characters ▼"}
+                          </span>
+                          <MissedCharactersTable
+                            missedCharacters={stats.missedCharacters}
+                            show={showMissedCharacters}
+                          />
+                        </div>
+                      ) : null}
+                      {isAuthenticated ? (
+                        <div className="w-1/2">
+                          <RateTest rating={rating} setRating={setRating} />
+                        </div>
+                      ) : null}
                     </div>
                   </div>
                   <div className="mt-4">

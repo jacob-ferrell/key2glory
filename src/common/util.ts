@@ -8,6 +8,14 @@ export function createRange(min: number, max: number) {
     max,
     includes(n: number) {
       return n >= min && n < max;
-    },
+    }
   };
+}
+
+export function getCurrentTime() {
+  return new Date().getTime();
+}
+
+export function countWords(text: string) {
+  return text.split(" ").length;
 }

@@ -1,8 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import useTimer from "./useTimer";
-import useStats from "./useStats";
-import { useAuth0 } from "@auth0/auth0-react";
-import postScore from "../api/postScore";
 import useSession from "./useSession";
 
 
@@ -15,10 +11,7 @@ export default function useInput(text: string | null) {
 
   const prevUserInputRef = useRef<string>("");
 
-  const timer = useTimer();
-  const stats = useStats({ text, missedCharacters, timer });
-  const { isAuthenticated } = useAuth0();
-  const session = useSession();
+  const session = useSession({ text, missedCharacters });
 
 
   useEffect(() => {
@@ -30,13 +23,12 @@ export default function useInput(text: string | null) {
 
   useEffect(() => {
     if (text === null) return;
-    if (userInput.length && timer.interval === null) {
-      //start timer if user starts typing
-      timer.start();
+    if (userInput.length && session.timer.interval === null) {
+      //start session if user starts typing
       session.start();
     }
-    if (!userInput.length && timer.interval !== null) {
-      //stop timer if user deletes all input and reset all stats
+    if (!userInput.length && session.timer.interval !== null) {
+      //stop session if user deletes all input and reset all stats
       return reset();
     }
     if (
@@ -60,7 +52,7 @@ export default function useInput(text: string | null) {
     if (userInput.length === text.length) {
       handleCompletion();
     }
-  }, [userInput, timer.interval]);
+  }, [userInput, session.timer.interval]);
 
   function isBackSpace(prev: string, value: string) {
     return prev.length > value.length;
@@ -92,32 +84,19 @@ export default function useInput(text: string | null) {
   }
 
   async function handleCompletion() {
-    timer.stop();
+    if (isExploading) return;
+    console.log("handleCompletion");
     session.stop();
+    reset();
     setIsExploading(true);
-    // stats.getStats();
-    // const { WPM, accuracy, time, overallScore, wpmScore, missedCharacters } = stats.stats;
-    // if (isAuthenticated && time > 0) {
-    //   await postScore(
-    //     {
-    //       WPM,
-    //       accuracy,
-    //       time,
-    //       overallScore,
-    //       wpmScore,
-    //       missedCharacters
-    //     },
-    //     1
-    //   );
-    // }
     setTimeout(() => {
       setShowModal(true);
-      reset();
+      //reset();
     }, 1000);
   }
 
   function reset() {
-    timer.reset();
+    //session.timer.reset();
     setMatches([]);
     setMissedCharacters([]);
     setUserInput("");
@@ -131,12 +110,14 @@ export default function useInput(text: string | null) {
     });
   }
   return {
-    elapsedTime: timer.elapsedTime,
+    elapsedTime: session.timer.elapsedTime,
     matches,
     isExploading,
     showModal,
     setShowModal,
-    stats: stats.stats,
+    reset,
+    stats: session.stats,
     setUserInput,
+    missedCharacters,
   };
 }

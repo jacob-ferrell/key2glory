@@ -2,7 +2,7 @@ import GameTextDisplay from "./GameTextDisplay";
 import Stopwatch from "./Stopwatch";
 import ClearButton from "./ClearButton";
 import StatsModal from "./StatsModal";
-import useInput from "../../hooks/useInput";
+import useGame from "../../hooks/useGame";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import getTest from "../../api/getTest";
@@ -33,19 +33,25 @@ export default function Game() {
     setShowModal,
     stats,
     setUserInput,
-  } = useInput(typingTest === null ? null : typingTest.text);
-
+    missedCharacters,
+  } = useGame(typingTest === null ? null : typingTest.text);
 
   return (
     <>
-      <StatsModal
-        isOpen={showModal}  
-        setIsOpen={setShowModal}
-        stats={{WPM: 100, accuracy: 98, missedCharacters: [], time: 20, wpmScore: 5, overallScore: 98}}
-        setRating={(rating: number | null) => 
-          setTypingTest(prev => prev ? { ...prev, currentUserRating: rating } : null)
-        }        rating={typingTest === null ? null : typingTest.currentUserRating}
-      />
+      {showModal ? (
+        <StatsModal
+          isOpen={showModal}
+          setIsOpen={setShowModal}
+          missedCharacters={missedCharacters}
+          stats={stats}
+          setRating={(rating: number | null) =>
+            setTypingTest((prev) =>
+              prev ? { ...prev, currentUserRating: rating } : null
+            )
+          }
+          rating={typingTest === null ? null : typingTest.currentUserRating}
+        />
+      ) : null}
       <div className="flex flex-col items-center gap-12 h-screen">
         <Stopwatch elapsedTime={elapsedTime} />
         <GameTextDisplay
