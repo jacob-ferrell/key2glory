@@ -1,14 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { TypingTest } from "../../common/types";
+import usePage from "../../hooks/usePage";
+import { countWords } from "../../common/util";
 
-type TestsTableProps = {
-    tests: TypingTest[];
-};
 
-export default function TestsTable({ tests }: TestsTableProps) {
+export default function TestsTable() {
   const tableHeadings = [
     "Type",
-    "Length",
+    "Length (words/characters)",
     "Average Rating",
     "Ratings",
     "Completed",
@@ -17,15 +16,16 @@ export default function TestsTable({ tests }: TestsTableProps) {
 
   const navigate = useNavigate();
 
+  const page = usePage();
+
   function handleClick(testId: number) {
     navigate(`/typing-test/${testId}`);
   }
   
   return (
-    <div className="w-3/4 px-3">
-      <h1>Tests Table</h1>
-      <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <div className="w-fit p-1 bg-zinc-700 rounded">
+      <table className="w-full text-sm text-left text-zinc-300 dark:text-zinc-300">
+        <thead className="text-xs text-zinc-300 uppercase bg-zinc-50 dark:bg-zinc-700 dark:text-zinc-300">
           <tr>
             {tableHeadings.map((heading, i) => <th scope="col" key={'h' + i} className="px-2 py-2">
               {heading}
@@ -34,14 +34,14 @@ export default function TestsTable({ tests }: TestsTableProps) {
           </tr>
         </thead>
         <tbody>
-            {tests?.map((test, i) => {
+            {page.results.map((test, i) => {
                 return (
-                    <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-600" key={i} onClick={() => handleClick(test.id)}>
+                    <tr className="bg-white border-b dark:bg-zinc-800 dark:border-zinc-700 cursor-pointer hover:bg-zinc-600" key={i} onClick={() => handleClick(test.id)}>
                         <td className="px-2 py-1">{test.type}</td>
-                        <td className="px-2 py-1">{test.text.length + " characters"}</td>
+                        <td className="px-2 py-1">{`${countWords(test.text)}/${test.text.length}`}</td>
                         <td className="px-2 py-1">{test.rating}</td>
                         <td className="px-2 py-1">{test.ratings}</td>
-                        <td className="px-2 py-1">{test.scoresCount}</td>
+                        <td className="px-2 py-1">{test.scoresCount !== null ? test.scoresCount : 0}</td>
                         <td className="px-2 py-1">{test.createdBy}</td>
                     </tr>
                 )
