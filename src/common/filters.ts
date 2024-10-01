@@ -3,6 +3,16 @@ import { FilterType } from "./types";
   
   const filters: FilterType[] = [
     {
+      name: "My Favorites",
+      options: {
+        Favorites: "MY_FAVORITES",
+        "My Most Completed": "MY_MOST_COMPLETED",
+        "My Highest Rated": "MY_HIGHEST_RATED",
+        "My Highest WPM": "MY_HIGHEST_WPM",
+      },
+      queryParam: "favorites",
+    },
+    {
       name: "Test Type",
       options: {
         "Numbers": "NUMBERS",
