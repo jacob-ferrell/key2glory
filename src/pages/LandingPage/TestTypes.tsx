@@ -38,7 +38,7 @@ export default function TestTypes() {
     },
     {
       name: "Special Characters",
-      description: "Typing test with a focus special characters",
+      description: "Typing test with a focus on special characters",
       testId: 3,
       coloredText: (
         <div className="text-xl font-bold bg-zinc-900 px-2 rounded-xl">
@@ -52,19 +52,21 @@ export default function TestTypes() {
   ];
   return (
     <div className="w-full px-6 my-6">
-      <h1 className="w-full text-left text-white text-4xl mb-3">Speed Tests</h1>
+      <h1 className="w-full text-left text-white text-4xl mb-3">Quick Play</h1>
       <div className="w-full h-fit bg-zinc-800 flex rounded-lg">
         {testTypes.map((testType, i) => {
           return (
             <div
               key={"test" + i}
-              className="w-1/3 h-full flex flex-col justify-center text-white items-start p-4 gap-5 relative"
+              className="w-1/3 h-full flex flex-col justify-between items-start text-white p-4 gap-5 relative"
             >
-              <div className="flex justify-start gap-5 text-xl items-center w-full">
-                <div className="text-2xl font-bold">{testType.name}</div>
-                {testType?.coloredText}
+              <div className="flex flex-col gap-2">
+                <div className="flex justify-start gap-5 text-xl items-center w-full">
+                  <div className="text-2xl font-bold">{testType.name}</div>
+                  {testType?.coloredText}
+                </div>
+                <div className="h-12">{testType.description}</div>
               </div>
-              <div className="h-12">{testType.description}</div>
               <button
                 onClick={() => navigate(`/typing-test/${testType.testId}`)}
                 className={`bg-purple-600 px-3 font-bold`}
