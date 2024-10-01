@@ -1,5 +1,7 @@
+type MissedCharactersMap = Map<string, number>;
+
 type MissedCharactersTableProps = {
-  missedCharacters: string[];
+  missedCharacters: string[] | MissedCharactersMap;
   show: boolean;
 };
 
@@ -7,14 +9,20 @@ export default function MissedCharactersTable({
   missedCharacters,
   show,
 }: MissedCharactersTableProps) {
-  const missedCharactersMap = new Map<string, number>();
-  missedCharacters.forEach((char) => {
-    if (missedCharactersMap.has(char)) {
-      missedCharactersMap.set(char, missedCharactersMap.get(char)! + 1);
-    } else {
-      missedCharactersMap.set(char, 1);
-    }
-  });
+   let missedCharactersMap: MissedCharactersMap;
+  if (Array.isArray(missedCharacters)) {
+    missedCharactersMap = new Map<string, number>();
+    missedCharacters.forEach((char) => {
+      if (missedCharactersMap.has(char)) {
+        missedCharactersMap.set(char, missedCharactersMap.get(char)! + 1);
+      } else {
+        missedCharactersMap.set(char, 1);
+      }
+    });
+  } else {
+    missedCharactersMap = missedCharacters;
+  }
+  console.log(missedCharactersMap)
   return (
     <div
       className={`relative overflow-x-auto transition-all duration-500 ${
@@ -37,7 +45,10 @@ export default function MissedCharactersTable({
             .sort((a, b) => b[1] - a[1])
             .map(([key, value], i) => {
               return (
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700" key={i}>
+                <tr
+                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  key={i}
+                >
                   <th
                     scope="row"
                     className="px-2 py-1 font-medium text-gray-900 whitespace-nowrap dark:text-white"
