@@ -24,4 +24,14 @@ axiosInstance.interceptors.request.use(
   }
 );
 
+axiosInstance.interceptors.response.use(
+  (response) => {
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+    }
+    return response;
+  },
+);
+
+
 export default axiosInstance;
