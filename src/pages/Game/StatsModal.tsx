@@ -4,6 +4,8 @@ import RateTest from "./RateTest";
 import MissedCharactersTable from "./MissedCharactersTable";
 import { Stats } from "../../common/types";
 import { useAuth0 } from "@auth0/auth0-react";
+import addToFavorites from "../../api/addToFavorites";
+import { useParams } from "react-router-dom";
 
 type StatsModalProps = {
   stats: Stats;
@@ -36,6 +38,8 @@ export default function StatsModal({
     accuracy: 0,
     overallScore: 0,
   });
+
+  const { testId } = useParams();
 
   useEffect(() => {
     setTimeout(() => {
@@ -159,8 +163,13 @@ export default function StatsModal({
                         </div>
                       ) : null}
                       {isAuthenticated ? (
-                        <div className="w-1/2">
-                          <RateTest rating={rating} setRating={setRating} />
+                        <div className="flex justify-between w-full">
+                          <div className="w-1/2">
+                            <RateTest rating={rating} setRating={setRating} />
+                          </div>
+                          <div className="cursor-pointer text-gray-400" onClick={() => testId ? addToFavorites(testId) : null}>
+                            Add to Favorites
+                          </div>
                         </div>
                       ) : null}
                     </div>
