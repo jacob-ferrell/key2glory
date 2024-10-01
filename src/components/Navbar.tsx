@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
-import axiosInstance from "../api/axiosInstance.js";
-import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import UserDropdown from "./UserDropdown";
 
 export default function Navbar() {
   const {
@@ -12,35 +11,35 @@ export default function Navbar() {
     isLoading,
     logout,
     getAccessTokenSilently,
-    getIdTokenClaims,
   } = useAuth0();
 
+  const location = useLocation();
+
+  const allFalse = {
+    leaderboards: false,
+    browse: false,
+  }
+
+  const [selected, setSelected] = useState(allFalse);
+
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) return;
-    if (user) {
-      console.log(Object.keys(user));
+    if (isLoading) return;
+    if (!isAuthenticated) {
+      localStorage.removeItem("token");
+      return;
     }
-    getIdTokenClaims().then((res) => console.log(res));
     getAccessTokenSilently().then((res) => {
       console.log(res);
       localStorage.setItem("token", res);
-      interface MyResponseData {
-        // Define the structure of your response data here
-        // For example, if your response data is JSON with a 'message' field:
-        message: string;
-      }
-
-      // ...
-
-      axiosInstance
-        .get<MyResponseData>("/private/secured")
-        .then((res: AxiosResponse<MyResponseData>) => {
-          // Access the response data
-          const responseData: MyResponseData = res.data;
-          console.log(responseData);
-        });
     });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isLoading]);
+
+  useEffect(() => {
+    if (location.pathname.includes("browse")) {
+      return setSelected({ ...selected, browse: true });
+    }
+    setSelected(allFalse);
+  }, [location.pathname])
   return (
     <div
       className="flex justify-between w-full items-center h-16 text-gray-50 text-lg shadow-sm font-sans font-bold px-6"
@@ -51,20 +50,17 @@ export default function Navbar() {
           <div className="text-2xl cursor-pointer">Key2Glory</div>
         </Link>
         <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
-          Test My Speed
-        </div>
-        <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
           Leaderboards
         </div>
+        <Link to="/typing-test/browse">
+          <div className={`cursor-pointer rounded transition duration-300 hover:text-purple-600 ${selected.browse ? 'text-purple-600' : null}`}>
+            Browse
+          </div>
+        </Link>
       </div>
       <div className="flex gap-4 items-center">
         {isAuthenticated ? (
-          <div
-            onClick={() => logout()}
-            className="cursor-pointer rounded transition duration-300 hover:text-purple-600"
-          >
-            Log Out
-          </div>
+          <UserDropdown />
         ) : (
           <div
             onClick={() => loginWithRedirect()}
