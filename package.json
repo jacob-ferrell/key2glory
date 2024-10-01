@@ -12,6 +12,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
     "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
     "autoprefixer": "^10.4.15",
     "axios": "^1.5.0",
     "postcss": "^8.4.28",
