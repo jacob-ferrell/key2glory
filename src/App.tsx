@@ -10,6 +10,7 @@ import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import testSpecial from "./assets/test-strings/testSpecial";
 import BrowseTests from "./pages/BrowseTests/BrowseTests";
+import UserStats from "./pages/UserStats/UserStats";
 
 const HeaderLayout = () => (
   <>
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
         path:'/typing-test/browse',
         element: <BrowseTests />,
       },
+      {
+        path:'/user/stats',
+        element: <UserStats />,
+      }
     ],
   },
 ]);
