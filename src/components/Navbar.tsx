@@ -49,9 +49,15 @@ export default function Navbar() {
         <Link to="/">
           <div className="text-2xl cursor-pointer">Key2Glory</div>
         </Link>
+        <Link to="/">
+          <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
+            Home 
+          </div>
+        </Link>
         <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
           Leaderboards
         </div>
+        
         <Link to="/typing-test/browse">
           <div className={`cursor-pointer rounded transition duration-300 hover:text-purple-600 ${selected.browse ? 'text-purple-600' : null}`}>
             Browse
