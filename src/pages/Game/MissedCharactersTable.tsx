@@ -22,7 +22,6 @@ export default function MissedCharactersTable({
   } else {
     missedCharactersMap = missedCharacters;
   }
-  console.log(missedCharactersMap)
   return (
     <div
       className={`relative overflow-x-auto transition-all duration-500 ${
