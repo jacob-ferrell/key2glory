@@ -11,6 +11,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import testSpecial from "./assets/test-strings/testSpecial";
 import BrowseTests from "./pages/BrowseTests/BrowseTests";
 import UserStats from "./pages/UserStats/UserStats";
+import CreateTest from "./pages/CreateTest/CreateTest";
 
 const HeaderLayout = () => (
   <>
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
       {
         path:'/user/stats',
         element: <UserStats />,
+      },
+      {
+        path:'/create/:testType',
+        element: <CreateTest />,
       }
     ],
   },
