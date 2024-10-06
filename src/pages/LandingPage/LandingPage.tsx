@@ -14,7 +14,6 @@ export default function LandingPage() {
             <ul className="list-disc px-6">
               <li>Record your scores</li>
               <li>Track your strengths and weaknesses</li>
-              <li>Set goals</li>
               <li>Generate customized tests</li>
               <li>Rate tests</li>
               <li>Be visible in leaderboards</li>
