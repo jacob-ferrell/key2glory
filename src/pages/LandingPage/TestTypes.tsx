@@ -1,13 +1,14 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import { useNavigate } from "react-router-dom";
 
 export default function TestTypes() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth0();
 
   const testTypes = [
     {
       name: "General",
-      description:
-        "Typing test with common words, punctuation and occasional numbers",
+      description: "Typing test with common words and punctuations",
       testId: 1,
       coloredText: (
         <div className="text-xl font-bold bg-zinc-900 px-2 rounded-xl">
@@ -67,12 +68,24 @@ export default function TestTypes() {
                 </div>
                 <div className="h-12">{testType.description}</div>
               </div>
-              <button
-                onClick={() => navigate(`/typing-test/${testType.testId}`)}
-                className={`bg-purple-600 px-3 font-bold`}
-              >
-                Begin!
-              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => navigate(`/typing-test/${testType.testId}`)}
+                  className={`bg-purple-600 px-3 font-bold`}
+                >
+                  Begin!
+                </button>
+                {!!isAuthenticated ? (
+                  <button
+                    className={`bg-purple-600 px-3 font-bold`}
+                    onClick={() =>
+                      navigate(`/create/${testType.name.toLowerCase().replace(' ', '-')}`)
+                    }
+                  >
+                    Create Your Own!
+                  </button>
+                ) : null}
+              </div>
               {i !== 0 ? (
                 <div className="border-r-4 h-3/4 rounded-full border-zinc-900 absolute -left-2.5 z-20"></div>
               ) : null}
