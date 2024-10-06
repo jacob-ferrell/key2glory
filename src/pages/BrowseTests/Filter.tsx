@@ -82,7 +82,7 @@ export default function Filter({
               type="checkbox"
               name={option}
               id={option}
-              checked={checkboxes[option]}
+              checked={checkboxes[option] || false}
               onChange={handleChange}
               className="cursor-pointer"
             />
