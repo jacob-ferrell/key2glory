@@ -7,6 +7,14 @@ export interface Stats {
   overallScore: number;
 }
 
+export interface GeneralStats {
+  averageWPM: number;
+  highestWPM: number;
+  averageAccuracy: number;
+  testsCompleted: number;
+  testsContributed: number;
+}
+
 type FilterOption = {
   [key: string]: string; // Key-value pairs where the key is the display name and the value is the query parameter value
 };
