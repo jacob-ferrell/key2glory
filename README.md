@@ -1,27 +1,24 @@
-# React + TypeScript + Vite
+# Key2Glory
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Key2Glory is a typing test website created using React, Java/Spring, and PostgreSQL. It allows users to take, create, share, and search for typing tests. The application tracks missed characters and provides general overall typing statistics.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Take Typing Tests**: Users can participate in various typing tests to improve their typing skills.
+- **Create and Share Tests**: Users can create custom typing tests and share them with others.
+- **Track Performance**: The app tracks missed characters and provides detailed typing statistics.
+- **Search Tests**: Easily search for available typing tests to practice.
 
-## Expanding the ESLint configuration
+## Live Application
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+You can check out the live application here: [Key2Glory Live App](https://key2glory.jacobferrell.net)
 
-- Configure the top-level `parserOptions` property like this:
+## Backend Repository
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+The backend repository can be found here: [Backend Repository](https://github.com/jacob-ferrell/key2glory-backend)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Technologies Used
+
+- **Frontend**: React
+- **Backend**: Java/Spring
+- **Database**: PostgreSQL
