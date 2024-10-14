@@ -124,7 +124,7 @@ export default function StatsModal({
                       </li>
                       <li className="flex flex-col gap-1 flex-wrap nowrap items-center">
                         <span className="font-bold">
-                          Overall Score: {stats.overallScore}
+                          Overall Score: {Math.round((stats.overallScore + Number.EPSILON) * 100) / 100}
                         </span>
                         <div className="rounded bg-gray-200 relative w-full h-5">
                           <div

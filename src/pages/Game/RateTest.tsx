@@ -15,7 +15,6 @@ export default function RateTest({ rating, setRating }: RateTestProps) {
 
   useEffect(() => {
     if (rating === null) return;
-    console.log("rating changed: ", rating);
     colorStars(rating);
   }, [rating]);
 
@@ -41,7 +40,6 @@ export default function RateTest({ rating, setRating }: RateTestProps) {
             postTestRating(Number(testId), { rating: i + 1 })
               .then((res) => {
                 setRating(res.rating);
-                console.log(res);
               })
               .catch((err) => console.log(err));
           }}

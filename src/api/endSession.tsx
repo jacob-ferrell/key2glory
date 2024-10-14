@@ -8,6 +8,5 @@ type endSessionParams = {
 
 export default async function endSession({ testId, endTime, missedCharacters }: endSessionParams) {
     const res = await axiosInstance.put(`private/typing-test/${testId}/session`, { endTime, missedCharacters });
-    console.log(res.data)
     return res.data;
 }

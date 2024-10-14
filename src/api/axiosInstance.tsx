@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-const baseURL = "http://localhost:8081/api/";
+const baseURL = "https://key2glory-server.jacobferrell.net/api/";
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
