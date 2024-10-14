@@ -17,7 +17,6 @@ export default function useStats({
     let words: number = text.split(" ").length;
     let minutes: number = parseFloat((elapsedTime / 60).toFixed(2));
     let WPM: number = parseFloat((words / minutes).toFixed(2));
-    console.log(words, minutes, WPM);
     return WPM;
   }
 

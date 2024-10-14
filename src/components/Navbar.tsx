@@ -29,7 +29,6 @@ export default function Navbar() {
       return;
     }
     getAccessTokenSilently().then((res) => {
-      console.log(res);
       localStorage.setItem("token", res);
     });
   }, [isAuthenticated, isLoading]);
