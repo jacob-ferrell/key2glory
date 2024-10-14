@@ -1,6 +1,12 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-const baseURL = "https://key2glory-server.jacobferrell.net/api/";
+let baseURL;
+if (import.meta.env.DEV) {
+  baseURL = import.meta.env.VITE_API_SERVER_URL;
+} else if (import.meta.env.PROD) {
+  baseURL = "https://tomcatserver.jacobferrell.net/Key2Glory-0.0.1-SNAPSHOT/api/";
+}
+
 
 const axiosInstance: AxiosInstance = axios.create({
   baseURL,
