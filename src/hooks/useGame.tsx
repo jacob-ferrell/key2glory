@@ -85,7 +85,6 @@ export default function useInput(text: string | null) {
 
   async function handleCompletion() {
     if (isExploading) return;
-    console.log("handleCompletion");
     session.stop();
     reset();
     setIsExploading(true);
