@@ -6,10 +6,8 @@ import UserDropdown from "./UserDropdown";
 export default function Navbar() {
   const {
     loginWithRedirect,
-    user,
     isAuthenticated,
     isLoading,
-    logout,
     getAccessTokenSilently,
   } = useAuth0();
 
