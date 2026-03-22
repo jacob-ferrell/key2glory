@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import usePage from "../../hooks/usePage";
 import useSearch from "../../hooks/useSearch";
 
 type FilterProps = {
@@ -25,7 +24,6 @@ export default function Filter({
 
   const search = useSearch();
 
-  const { setCurrent } = usePage();
 
   useEffect(() => {
     const param = searchParams.get(queryParam);

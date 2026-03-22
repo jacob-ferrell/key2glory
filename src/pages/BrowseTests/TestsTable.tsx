@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { TypingTest } from "../../common/types";
 import usePage from "../../hooks/usePage";
 import { countWords } from "../../common/util";
 

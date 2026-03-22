@@ -1,6 +1,5 @@
 
 import { useLocation, useSearchParams } from "react-router-dom";
-import usePage from "./usePage";
 import { useEffect } from "react";
 
 export default function useSearch() {

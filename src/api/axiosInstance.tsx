@@ -3,8 +3,8 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 let baseURL;
 if (import.meta.env.DEV) {
   baseURL = import.meta.env.VITE_API_SERVER_URL;
-} else if (import.meta.env.PROD) {
-  baseURL = "https://tomcatserver.jacobferrell.net/Key2Glory-0.0.1-SNAPSHOT/api/";
+} else {
+  baseURL = import.meta.env.VITE_API_BASE_URL ?? "/api/";
 }
 
 
