@@ -1,10 +1,14 @@
 import TestTypes from "./TestTypes";
 import { useAuth0 } from "@auth0/auth0-react";
+import logo from "../../assets/images/logo.png";
 
 export default function LandingPage() {
   const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
   return (
     <div className="h-full">
+      <div className="flex justify-center pt-4 pb-0">
+        <img src={logo} alt="Key2Glory" className="h-72 object-contain -mt-24 -mb-36" />
+      </div>
       <TestTypes />
       {!isLoading && !isAuthenticated ? (
         <div className="w-full h-fit px-6">

@@ -16,11 +16,6 @@ export default function TestTypes() {
           <span className="text-red-500">B</span>
           <span className="text-yellow-500">C</span>
           <span className="text-green-500">1</span>
-          {/* <span className="text-purple-500">T</span>
-          <span className="text-orange-500">Y</span>
-          <span className="text-yellow-500">1</span>
-          <span className="text-red-500">2</span>
-          <span className="text-blue-500">3</span> */}
         </div>
       ),
     },

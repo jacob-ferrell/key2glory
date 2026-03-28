@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect, useState } from "react";
 import UserDropdown from "./UserDropdown";
+import logoIcon from "../assets/images/logo-icon.png";
 
 export default function Navbar() {
   const {
@@ -43,7 +44,8 @@ export default function Navbar() {
       role="navigation"
     >
       <div className="flex gap-4 items-center">
-        <Link to="/">
+        <Link to="/" className="flex items-center gap-2">
+          <img src={logoIcon} alt="Key2Glory" className="h-10 w-10 rounded-full object-cover" />
           <div className="text-2xl cursor-pointer">Key2Glory</div>
         </Link>
         <Link to="/">
