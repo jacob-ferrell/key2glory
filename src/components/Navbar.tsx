@@ -1,80 +1,49 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect, useState } from "react";
 import UserDropdown from "./UserDropdown";
 import logoIcon from "../assets/images/logo-icon.png";
 
+function navClass({ isActive }: { isActive: boolean }) {
+  return `rounded px-1 transition duration-300 hover:text-purple-400 ${isActive ? "text-purple-400" : ""}`;
+}
+
 export default function Navbar() {
-  const {
-    loginWithRedirect,
-    isAuthenticated,
-    isLoading,
-    getAccessTokenSilently,
-  } = useAuth0();
+  const { loginWithRedirect, isAuthenticated, isLoading } = useAuth0();
 
-  const location = useLocation();
-
-  const allFalse = {
-    leaderboards: false,
-    browse: false,
-  }
-
-  const [selected, setSelected] = useState(allFalse);
-
-  useEffect(() => {
-    if (isLoading) return;
-    if (!isAuthenticated) {
-      localStorage.removeItem("token");
-      return;
-    }
-    getAccessTokenSilently().then((res) => {
-      localStorage.setItem("token", res);
-    });
-  }, [isAuthenticated, isLoading]);
-
-  useEffect(() => {
-    if (location.pathname.includes("browse")) {
-      return setSelected({ ...selected, browse: true });
-    }
-    setSelected(allFalse);
-  }, [location.pathname])
   return (
-    <div
-      className="flex justify-between w-full items-center h-16 text-gray-50 text-lg shadow-sm font-sans font-bold px-6"
-      role="navigation"
-    >
-      <div className="flex gap-4 items-center">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logoIcon} alt="Key2Glory" className="h-10 w-10 rounded-full object-cover" />
-          <div className="text-2xl cursor-pointer">Key2Glory</div>
+    <nav className="flex flex-wrap justify-between gap-y-2 w-full max-w-6xl mx-auto items-center min-h-16 py-3 text-gray-50 font-bold px-4 sm:px-6">
+      <div className="flex flex-wrap gap-x-5 gap-y-1 items-center">
+        <Link to="/" className="flex items-center gap-2 mr-2">
+          <img src={logoIcon} alt="" className="h-10 w-10 rounded-full object-cover" />
+          <span className="text-2xl">Key2Glory</span>
         </Link>
-        <Link to="/">
-          <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
-            Home 
-          </div>
-        </Link>
-        <div className="cursor-pointer rounded transition duration-300 hover:text-purple-600">
+        <NavLink to="/" end className={navClass}>
+          Home
+        </NavLink>
+        <NavLink to="/typing-test/browse" className={navClass}>
+          Browse
+        </NavLink>
+        <NavLink to="/leaderboards" className={navClass}>
           Leaderboards
-        </div>
-        
-        <Link to="/typing-test/browse">
-          <div className={`cursor-pointer rounded transition duration-300 hover:text-purple-600 ${selected.browse ? 'text-purple-600' : null}`}>
-            Browse
-          </div>
-        </Link>
+        </NavLink>
+        {isAuthenticated ? (
+          <NavLink to="/create/general" className={navClass}>
+            Create
+          </NavLink>
+        ) : null}
       </div>
       <div className="flex gap-4 items-center">
-        {isAuthenticated ? (
+        {isLoading ? null : isAuthenticated ? (
           <UserDropdown />
         ) : (
-          <div
+          <button
             onClick={() => loginWithRedirect()}
-            className="cursor-pointer rounded transition duration-300 hover:text-purple-600"
+            className="rounded-md bg-purple-600 px-4 py-1.5 transition hover:bg-purple-500"
           >
             Sign In
-          </div>
+          </button>
         )}
       </div>
-    </div>
+    </nav>
   );
 }

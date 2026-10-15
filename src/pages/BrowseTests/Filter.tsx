@@ -1,99 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import useSearch from "../../hooks/useSearch";
+import { FilterType } from "../../common/types";
 
 type FilterProps = {
-  name: string;
-  options: Record<string, string>;
-  queryParam: string;
-  allowMultiple?: boolean;
+  filter: FilterType;
+  // Current query param value (comma separated when allowMultiple)
+  value: string | null;
+  onChange: (value: string | null) => void;
 };
 
-export default function Filter({
-  name,
-  options,
-  queryParam,
-  allowMultiple,
-}: FilterProps) {
-  const allFalse = Object.fromEntries(
-    Object.keys(options).map((option) => [option, false])
-  );
-  const [checkboxes, setCheckboxes] = useState(allFalse);
+export default function Filter({ filter, value, onChange }: FilterProps) {
+  const { name, options, queryParam, allowMultiple, defaultValue } = filter;
+  const selected = value ? value.split(",") : defaultValue ? [defaultValue] : [];
 
-  const [searchParams] = useSearchParams();
-
-  const search = useSearch();
-
-
-  useEffect(() => {
-    const param = searchParams.get(queryParam);
-    if (param && !allowMultiple) {
-      const key: string = Object.keys(options).find(
-        (o) => options[o] === param
-      )!;
-      return setCheckboxes({ ...allFalse, [key]: true });
+  function toggle(optionValue: string, checked: boolean) {
+    let next: string[];
+    if (allowMultiple) {
+      next = checked ? [...selected, optionValue] : selected.filter((v) => v !== optionValue);
+    } else {
+      next = checked ? [optionValue] : [];
     }
-    if (param) {
-      const checkedOptions = param.split(",");
-      const checkedKeys = Object.keys(options).filter((option) =>
-        checkedOptions.includes(options[option])
-      );
-      return setCheckboxes((prev) => ({
-        ...prev,
-        ...Object.fromEntries(checkedKeys.map((key) => [key, true])),
-      }));
-    }
-    if (queryParam !== "size") return setCheckboxes(allFalse);
-    setCheckboxes({ ...allFalse, ["10"]: true });
-    search.updateSearchParam("size", "10");
-  }, [searchParams.get(queryParam)]);
-
-  useEffect(() => {
-    
-    const allUnchecked = Object.values(checkboxes).every((v) => !v);
-    if (allUnchecked) {
-        search.updateSearchParam(queryParam, "");
-        return;
-    }
-    const checkedKeys = Object.keys(checkboxes).filter(
-      (key) => checkboxes[key]
-    );
-    const checkedOptions = checkedKeys.map((key) => options[key]);
-    search.updateSearchParam(queryParam, checkedOptions.join(","));
-  }, [checkboxes])
-
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setCheckboxes((prev) => {
-      return allowMultiple
-        ? { ...prev, [e.target.name]: e.target.checked }
-        : { ...allFalse, [e.target.name]: e.target.checked };
-    });
+    // The server default doesn't need to be in the URL
+    const isDefault = !allowMultiple && next.length === 1 && next[0] === defaultValue;
+    onChange(next.length === 0 || isDefault ? null : next.join(","));
   }
 
   return (
-    <div className="pl-3">
-      <h1 className="text-lg">{name}</h1>
-      <ul className="text-sm pl-3">
-        {Object.keys(options).map((option) => (
-          <li key={option} className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              name={option}
-              id={option}
-              checked={checkboxes[option] || false}
-              onChange={handleChange}
-              className="cursor-pointer"
-            />
-            <label
-              className="cursor-pointer"
-              onClick={(e) => e.stopPropagation()}
-              htmlFor={option}
-            >
-              {option}
-            </label>
-          </li>
-        ))}
+    <fieldset>
+      <legend className="mb-1 font-semibold">{name}</legend>
+      <ul className="flex flex-col gap-1 pl-1 text-sm">
+        {Object.entries(options).map(([label, optionValue]) => {
+          const id = `${queryParam}-${optionValue}`;
+          return (
+            <li key={optionValue} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id={id}
+                checked={selected.includes(optionValue)}
+                onChange={(e) => toggle(optionValue, e.target.checked)}
+                className="h-4 w-4 cursor-pointer accent-purple-500"
+              />
+              <label className="cursor-pointer text-zinc-300" htmlFor={id}>
+                {label}
+              </label>
+            </li>
+          );
+        })}
       </ul>
-    </div>
+    </fieldset>
   );
 }

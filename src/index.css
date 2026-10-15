@@ -8,7 +8,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* The UI is designed dark-only */
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #18181b;
 
@@ -18,57 +19,12 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-#root, html, body {
-  width: 100vw;
-  height: 100%;
-}
-
-/* a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-} */
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  background-color: #18181b;
 }
 
 .grow {
@@ -117,39 +73,8 @@ button {
   animation: fadeInOut 1s ease-in-out infinite;
 }
 
-
-
-/* .keybutton {
-  box-sizing: border-box;
-  line-height: 80px;
-  font-size: 22px;
-  text-align: center;
-  width: 80px;
-  color: #555;
-  cursor: pointer;
-  margin: 0 8px;
-  height: 80px;
-  border-color: #f2f2f2;
-  border-style: solid;
-  text-shadow: 0 0.5px 1px #777, 0 2px 6px #f2f2f2;
-  border-width: 1px;
-  border-radius: 10px;
-  background: -webkit-linear-gradient(top, #f9f9f9 0%, #D2D2D2 80%, #c0c0c0 100%);
-  font-family: sans-serif;
-  display: inline-block;
-  transition: box-shadow 0.3s ease, transform 0.15s ease;
-  box-shadow: 0 0 1px #888,0 1px 0 #fff, 0 6px 0 #C0C0C0, 0 8px 17px rgba(#444, 0.4), 2px 1px 4px rgba(#444, 0.25), -2px 1px 4px rgba(#444, 0.25), 0 9px 16px rgba(#444, 0.1);
-  
-  &:hover,
-  &:focus {
-    box-shadow: 0 0 1px #888,0 1px 0 #fff, 0 4px 0 #C0C0C0, 0 2px 35px rgba(#444, 0.3), 2px 2px 4px rgba(#444, 0.25), -2px 2px 4px rgba(#444, 0.25), 0 7px 4px rgba(#444, 0.1);
-    transform: translateY(2px);
+@media (prefers-reduced-motion: reduce) {
+  .grow, .wiggle, .animate-opacity {
+    animation: none;
   }
-  
-  &:active {
-    box-shadow: 0 0 1px #888,0 1px 0 #fff, 0 0 0 #C0C0C0, 0 0px 30px rgba(#444, 0.15), 2px 2px 4px rgba(#444, 0.25), -2px 2px 4px rgba(#444, 0.25), 0 0px 4px rgba(#444, 0.25);
-    transform: translateY(4px); 
-  }
-} */
-
-
+}

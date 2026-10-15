@@ -1,16 +1,7 @@
-import { useNavigate } from "react-router-dom";
-
-export default function ClearFiltersButton() {
-
-    const navigate = useNavigate();
-
-    function handleClick() {
-        navigate("/typing-test/browse");
-    }
-
-    return (
-        <button onClick={handleClick} className="bg-purple-600 p-1 font-bold w-full">
-            Clear
-        </button>
-    );
+export default function ClearFiltersButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button onClick={onClick} className="w-full rounded-md bg-purple-600 py-1.5 font-semibold transition hover:bg-purple-500">
+      Clear filters
+    </button>
+  );
 }
