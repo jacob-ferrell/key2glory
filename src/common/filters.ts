@@ -1,56 +1,56 @@
 import { FilterType } from "./types";
 
-  
-  const filters: FilterType[] = [
-    {
-      name: "My Favorites",
-      options: {
-        Favorites: "MY_FAVORITES",
-        "My Most Completed": "MY_MOST_COMPLETED",
-        "My Highest Rated": "MY_HIGHEST_RATED",
-        "My Highest WPM": "MY_HIGHEST_WPM",
-      },
-      queryParam: "favorites",
+const filters: FilterType[] = [
+  {
+    name: "My Tests",
+    options: {
+      Favorites: "FAVORITES",
+      "Created by Me": "CREATED",
+      "Completed by Me": "COMPLETED",
     },
-    {
-      name: "Test Type",
-      options: {
-        "Numbers": "NUMBERS",
-        "General": "GENERAL",
-        "Special Characters": "SPECIAL_CHARACTERS",
-      },
-      queryParam: "types",
-      allowMultiple: true,
+    queryParam: "mine",
+    requiresAuth: true,
+  },
+  {
+    name: "Test Type",
+    options: {
+      General: "GENERAL",
+      Numbers: "NUMBERS",
+      "Special Characters": "SPECIAL_CHARACTERS",
     },
-    {
-      name: "Sort By",
-      options: {
-        "Most Completed": "COMPLETED",
-        "Highest Rating": "RATING",
-        "Newest": "CREATED",
-        "Length": "LENGTH",
-      },
-      queryParam: "sort",
+    queryParam: "types",
+    allowMultiple: true,
+  },
+  {
+    name: "Sort By",
+    options: {
+      Newest: "CREATED",
+      "Most Completed": "COMPLETED",
+      "Highest Rating": "RATING",
+      Length: "LENGTH",
     },
-    {
-      name: "Order",
-      options: {
-        "Ascending": "ASC",
-        "Descending": "DESC",
-      },
-      queryParam: "order",
+    queryParam: "sort",
+    defaultValue: "CREATED",
+  },
+  {
+    name: "Order",
+    options: {
+      Descending: "DESC",
+      Ascending: "ASC",
     },
-    {
-        name: "Results Per Page",
-        options: {
-            "10": "10",
-            "25": "25",
-            "50": "50",
-        },
-        queryParam: "size",
+    queryParam: "order",
+    defaultValue: "DESC",
+  },
+  {
+    name: "Results Per Page",
+    options: {
+      "10": "10",
+      "25": "25",
+      "50": "50",
     },
-    
-  ];
-  
-  export default filters;
-  
+    queryParam: "size",
+    defaultValue: "10",
+  },
+];
+
+export default filters;

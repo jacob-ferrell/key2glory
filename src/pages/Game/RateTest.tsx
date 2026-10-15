@@ -1,72 +1,56 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { StarIcon } from "@heroicons/react/24/solid";
 import postTestRating from "../../api/postTestRating";
-import { useParams } from "react-router-dom";
 
 type RateTestProps = {
+  testId: number;
   rating: number | null;
-  setRating: (rating: number | null) => void;
+  setRating: (rating: number) => void;
 };
 
-export default function RateTest({ rating, setRating }: RateTestProps) {
-  const allFalse: boolean[] = Array(5).fill(false);
-  const [starColors, setStarColors] = useState<boolean[]>(allFalse);
+export default function RateTest({ testId, rating, setRating }: RateTestProps) {
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState(false);
+  const shown = hovered ?? rating ?? 0;
 
-  const { testId } = useParams();
-
-  useEffect(() => {
-    if (rating === null) return;
-    colorStars(rating);
-  }, [rating]);
-
-  function colorStars(rating: number | null) {
-    if (rating === null) return;
-    setStarColors((prev) => prev.map((_, i) => i <= rating! - 1));
-  }
-
-  function setAllStarsGrey() {
-    setStarColors(allFalse);
-  }
-
-  function renderStars() {
-    return starColors.map((color, i) => {
-      return (
-        <svg
-          key={"star" + i}
-          className={`w-4 h-4 ${
-            color ? "text-yellow-400" : "text-gray-300"
-          } cursor-pointer`}
-          onMouseOver={() => colorStars(i + 1)}
-          onClick={async () => {
-            postTestRating(Number(testId), { rating: i + 1 })
-              .then((res) => {
-                setRating(res.rating);
-              })
-              .catch((err) => console.log(err));
-          }}
-          aria-hidden="true"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="currentColor"
-          viewBox="0 0 22 20"
-        >
-          <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-        </svg>
-      );
-    });
+  async function rate(value: number) {
+    setSaving(true);
+    setError(false);
+    try {
+      const res = await postTestRating(testId, value);
+      setRating(res.rating);
+    } catch (err) {
+      console.error("Failed to rate test", err);
+      setError(true);
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="text-blue-500 text-xs font-bold">
-        Rate This Test
+    <div className="flex flex-col items-start gap-1">
+      <div className="text-xs font-semibold uppercase tracking-wide text-zinc-400">
+        {rating ? "Your rating" : "Rate this test"}
       </div>
-      <div
-        className="flex items-center space-x-1 cursor-pointer"
-        onMouseLeave={() =>
-          rating === null ? setAllStarsGrey() : colorStars(rating)
-        }
-      >
-        {renderStars()}
+      <div className="flex items-center" onMouseLeave={() => setHovered(null)}>
+        {[1, 2, 3, 4, 5].map((value) => (
+          <button
+            key={value}
+            type="button"
+            disabled={saving}
+            aria-label={`Rate ${value} star${value > 1 ? "s" : ""}`}
+            onMouseEnter={() => setHovered(value)}
+            onFocus={() => setHovered(value)}
+            onBlur={() => setHovered(null)}
+            onClick={() => rate(value)}
+            className="p-0.5 disabled:opacity-60"
+          >
+            <StarIcon className={`h-6 w-6 transition ${value <= shown ? "text-yellow-400" : "text-zinc-600"}`} />
+          </button>
+        ))}
       </div>
+      {error ? <div className="text-xs text-red-300">Couldn't save your rating</div> : null}
     </div>
   );
 }

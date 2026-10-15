@@ -1,29 +1,30 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import Filter from "./Filter";
 import filters from "../../common/filters";
 import ClearFiltersButton from "./ClearFiltersButton";
-import { useAuth0 } from "@auth0/auth0-react";
 
-export default function Filters() {
+type FiltersProps = {
+  searchParams: URLSearchParams;
+  updateParam: (key: string, value: string | null) => void;
+  onClear: () => void;
+};
 
+export default function Filters({ searchParams, updateParam, onClear }: FiltersProps) {
   const { isAuthenticated } = useAuth0();
 
-  
   return (
-    <div className="w-fit bg-zinc-800 rounded h-fit px-3 py-2 flex flex-col gap-2">
-      {filters.slice(isAuthenticated ? 0 : 1).map((filter, i) => {
-        return (
+    <aside className="flex h-fit w-full shrink-0 flex-col gap-4 rounded-lg bg-zinc-800 px-4 py-3 md:w-56">
+      {filters
+        .filter((filter) => isAuthenticated || !filter.requiresAuth)
+        .map((filter) => (
           <Filter
-            key={i}
-            name={filter.name}
-            options={filter.options}
-            queryParam={filter.queryParam}
-            /* searchParams={_}
-            setSearchParams={setSearchParams} */
-            allowMultiple={filter.allowMultiple}
+            key={filter.queryParam}
+            filter={filter}
+            value={searchParams.get(filter.queryParam)}
+            onChange={(value) => updateParam(filter.queryParam, value)}
           />
-        );
-      })}
-      <ClearFiltersButton />
-    </div>
+        ))}
+      <ClearFiltersButton onClick={onClear} />
+    </aside>
   );
 }

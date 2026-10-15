@@ -1,23 +1,12 @@
-//import { useState } from "react";
-//import test2 from "./assets/test-strings/test2";
-//import test3 from "./assets/test-strings/test3";
-import "./App.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import HeaderLayout from "./components/HeaderLayout";
 import Game from "./pages/Game/Game";
-import Navbar from "./components/Navbar";
-import { Outlet, RouterProvider, createBrowserRouter } from "react-router-dom";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import BrowseTests from "./pages/BrowseTests/BrowseTests";
 import UserStats from "./pages/UserStats/UserStats";
 import CreateTest from "./pages/CreateTest/CreateTest";
-
-const HeaderLayout = () => (
-  <>
-    <header>
-      <Navbar />
-    </header>
-    <Outlet />
-  </>
-);
+import Leaderboards from "./pages/Leaderboards/Leaderboards";
+import NotFound from "./pages/NotFound/NotFound";
 
 const router = createBrowserRouter([
   {
@@ -28,31 +17,35 @@ const router = createBrowserRouter([
         element: <LandingPage />,
       },
       {
-        path: '/typing-test/:testId',
+        path: "/typing-test/:testId",
         element: <Game />,
       },
       {
-        path:'/typing-test/browse',
+        path: "/typing-test/browse",
         element: <BrowseTests />,
       },
       {
-        path:'/user/stats',
+        path: "/leaderboards",
+        element: <Leaderboards />,
+      },
+      {
+        path: "/user/stats",
         element: <UserStats />,
       },
       {
-        path:'/create/:testType',
+        path: "/create/:testType",
         element: <CreateTest />,
-      }
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
     ],
   },
 ]);
 
 function App() {
-  return (
-    <div>
-      <RouterProvider router={router} />
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

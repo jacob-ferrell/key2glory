@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import { Auth0Provider } from "@auth0/auth0-react";
 import { StrictMode } from "react";
+import AuthTokenSync from "./components/AuthTokenSync";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           "read:current_user update:current_user_metadata openid profile email",
       }}
     >
+      <AuthTokenSync />
       <App />
     </Auth0Provider>
   </StrictMode>

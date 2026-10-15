@@ -1,60 +1,41 @@
-import { useParams } from "react-router-dom";
+import { useRef } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import createSession from "../api/createSession";
 import endSession from "../api/endSession";
-import useTimer from "./useTimer";
-import { getCurrentTime } from "../common/util";
-import { useState } from "react";
-import { Stats } from "../common/types";
-import { useAuth0 } from "@auth0/auth0-react";
-import useStats from "./useStats";
+import { Score } from "../common/types";
 
-type useSessionProps = {
-  text: string | null;
-  missedCharacters: string[];
-};
-
-export default function useSession({
-  text,
-  missedCharacters,
-}: useSessionProps) {
-  const { testId } = useParams();
-  const [stats, setStats] = useState<Stats>({
-    wpm: 0,
-    accuracy: 0,
-    time: 0,
-    missedCharacters: [],
-    wpmScore: 0,
-    overallScore: 0,
-  });
+/**
+ * Server-side test session for signed-in users. The server records the start
+ * and calculates the score when the session is completed.
+ */
+export default function useSession(testId: string | undefined) {
   const { isAuthenticated } = useAuth0();
-  const timer = useTimer();
+  const startRequest = useRef<Promise<boolean> | null>(null);
 
-  async function start() {
-    timer.start();
-    if (!isAuthenticated) return;
-    await createSession(testId, getCurrentTime());
-  }
-
-  async function stop() {
-    const now = getCurrentTime();
-    const elapsedTime = timer.elapsedTime;
-    timer.reset();
+  function start(startTime: number) {
     if (!isAuthenticated) {
-      const unauthenticatedStats = useStats({
-        text,
-        missedCharacters,
-        elapsedTime,
-      });
-      setStats(unauthenticatedStats);
+      startRequest.current = null;
       return;
     }
-    const stats = await endSession({
-      testId,
-      endTime: now,
-      missedCharacters,
-    });
-    setStats(stats);
+    startRequest.current = createSession(testId, startTime)
+      .then(() => true)
+      .catch((err) => {
+        console.error("Failed to start test session", err);
+        return false;
+      });
   }
 
-  return { start, stop, stats, timer };
+  /** Resolves to the server score, or null when there is no session to complete (signed out). */
+  async function finish(endTime: number, missedCharacters: string[]): Promise<Score | null> {
+    const started = startRequest.current;
+    startRequest.current = null;
+    if (!isAuthenticated || !started) return null;
+    // A very short run can finish before the start request has completed
+    if (!(await started)) {
+      throw new Error("The test session couldn't be started");
+    }
+    return endSession({ testId, endTime, missedCharacters });
+  }
+
+  return { start, finish };
 }
