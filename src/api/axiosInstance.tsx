@@ -9,6 +9,17 @@ if (import.meta.env.DEV) {
 
 type TokenProvider = () => Promise<string | null>;
 
+// Auth0 can take up to a minute to give up when its domain is unreachable;
+// don't hold every request (including public ones) hostage to that
+const AUTH_WAIT_MS = 5000;
+
+function withTimeout<T>(promise: Promise<T>, fallback: T) {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => window.setTimeout(() => resolve(fallback), AUTH_WAIT_MS)),
+  ]);
+}
+
 let tokenProvider: TokenProvider | null = null;
 let markAuthReady: () => void;
 // Requests wait until Auth0 has finished loading, so the first request after a
@@ -32,9 +43,9 @@ const axiosInstance: AxiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (request: InternalAxiosRequestConfig): Promise<InternalAxiosRequestConfig> => {
-    await authReady;
-    // getAccessTokenSilently caches and refreshes tokens, so this is cheap
-    const token = await tokenProvider?.().catch(() => null);
+    await withTimeout(authReady, undefined);
+    // getAccessTokenSilently caches and refreshes tokens, so this is usually instant
+    const token = tokenProvider ? await withTimeout(tokenProvider().catch(() => null), null) : null;
     if (token) {
       request.headers["Authorization"] = `Bearer ${token}`;
     }
