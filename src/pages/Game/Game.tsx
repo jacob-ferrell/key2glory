@@ -43,10 +43,15 @@ export default function Game() {
   const saved = game.result?.saved;
   useEffect(() => {
     if (!saved) return;
+    let current = true;
     setLeaderboardKey((key) => key + 1);
     getTest(testId)
-      .then(setTest)
+      // Ignore the refresh if the user has moved on to another test
+      .then((fresh) => current && setTest(fresh))
       .catch((err) => console.error("Failed to refresh test", err));
+    return () => {
+      current = false;
+    };
   }, [saved, testId, setTest]);
 
   function updateTest(changes: Partial<TypingTest>) {

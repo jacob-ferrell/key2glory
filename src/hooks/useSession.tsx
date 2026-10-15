@@ -17,7 +17,10 @@ export default function useSession(testId: string | undefined) {
       startRequest.current = null;
       return;
     }
-    startRequest.current = createSession(testId, startTime)
+    // Chain onto the previous start so a quick restart can't be overtaken by an older request
+    const previous = startRequest.current ?? Promise.resolve(true);
+    startRequest.current = previous
+      .then(() => createSession(testId, startTime))
       .then(() => true)
       .catch((err) => {
         console.error("Failed to start test session", err);
@@ -28,7 +31,6 @@ export default function useSession(testId: string | undefined) {
   /** Resolves to the server score, or null when there is no session to complete (signed out). */
   async function finish(endTime: number, missedCharacters: string[]): Promise<Score | null> {
     const started = startRequest.current;
-    startRequest.current = null;
     if (!isAuthenticated || !started) return null;
     // A very short run can finish before the start request has completed
     if (!(await started)) {
